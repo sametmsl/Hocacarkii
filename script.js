@@ -1,29 +1,64 @@
-const hocalar = [
-  "MERAL BABACAN (CANIM HOCAM)",
-  "CEM (TARLA FARESİ)",
-  "TARİHÇİ (G*Y)",
-  "AHMET (KIRGINLIK)",
-  "MERVE ÜRER (ABDÜL BASİT ADAM)",
-  "DİLARA (ÖZLEDİK)",
-  "DİLEK (KÖR)",
-  "SEZİN (GERİ DÖN ŞEF!)",
-  "HÜMEYRA (SG)",
-  "ÖZLEM BÖLÜKBAŞ (GÖĞSÜNÜN DARALDIĞINI BİLİYORUZ)",
-  "HANİFE (PELTEK)",
-  "KOMUTAN",
-  "RESİMCİ (ADINI UNUTTUM)",
-  "SEZGİN (UKTE)",
-  "MEHMET ORTATEPE (👑)",
-  "MUAMMER",
-  "AVNİ",
-  "ZÜBEYDE",
-  "MURAT",
-  "İSMAİL KARTAL",
-  "EYÜP"
-];
-
-function cevir() {
-  const rastgele = Math.floor(Math.random() * hocalar.length);
-  const secilen = hocalar[rastgele];
-  document.getElementById("sonuc").innerText = secilen;
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  text-align: center;
+  padding-top: 60px;
 }
+
+.container {
+  width: 350px;
+  margin: auto;
+}
+
+.wheel {
+  margin: 20px auto;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 8px solid #3498db;
+  position: relative;
+  overflow: hidden;
+  transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.slice {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background-color: #3498db;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0% 0%;
+  border: 1px solid white;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 8px;
+}
+
+#spin {
+  padding: 12px 30px;
+  font-size: 18px;
+  border: none;
+  background: #2980b9;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#spin:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  min-height: 40px;
+  color: #2c3e50;
+  }
