@@ -1,20 +1,134 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Hangi Hocam Çarkı</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<title>Basit Dönen Çark</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 80px;
+  }
+  #wheel {
+    margin: 20px auto;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 10px solid #3498db;
+    position: relative;
+    overflow: hidden;
+    transition: transform 4s ease-out;
+  }
+  .slice {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0% 0%;
+    border: 1px solid white;
+    background-color: #3498db;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+    box-sizing: border-box;
+  }
+  button {
+    padding: 12px 30px;
+    font-size: 18px;
+    background-color: #2980b9;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+  }
+  button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+  #result {
+    margin-top: 25px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎡 Hangi Hocam Çarkı?</h1>
-    <div class="wheel" id="wheel">
-      <!-- Dilimleri JS dolduracak -->
-    </div>
-    <button id="spin">Çarkı Çevir</button>
-    <div id="result"></div>
-  </div>
 
-  <script src="script.js"></script>
+<h1>🎡 Basit Dönen Çark</h1>
+<div id="wheel"></div>
+<button id="spinBtn">Çarkı Çevir</button>
+<div id="result"></div>
+
+<script>
+  const hocalar = [
+    "MERAL BABACAN (CANIM HOCAM)",
+    "CEM (TARLA FARESİ)",
+    "TARİHÇİ (G*Y)",
+    "AHMET (KIRGINLIK)",
+    "MERVE ÜRER (ABDÜL BASİT ADAM)",
+    "DİLARA (ÖZLEDİK)",
+    "DİLEK (KÖR)",
+    "SEZİN (GERİ DÖN ŞEF!)",
+    "HÜMEYRA (SG)",
+    "ÖZLEM BÖLÜKBAŞ (GÖĞSÜNÜN DARALDIĞINI BİLİYORUZ)",
+    "HANİFE (PELTEK)",
+    "KOMUTAN",
+    "RESİMCİ (ADINI UNUTTUM)",
+    "SEZGİN (UKTE)",
+    "MEHMET ORTATEPE (👑)",
+    "MUAMMER",
+    "AVNİ",
+    "ZÜBEYDE",
+    "MURAT",
+    "İSMAİL KARTAL",
+    "EYÜP"
+  ];
+
+  const wheel = document.getElementById("wheel");
+  const spinBtn = document.getElementById("spinBtn");
+  const result = document.getElementById("result");
+  const segmentCount = hocalar.length;
+  const segmentAngle = 360 / segmentCount;
+  let currentRotation = 0;
+
+  // Dilimleri oluştur
+  hocalar.forEach((hoca, i) => {
+    const slice = document.createElement("div");
+    slice.classList.add("slice");
+    slice.style.transform = `rotate(${segmentAngle * i}deg) skewY(-${90 - segmentAngle}deg)`;
+    slice.style.backgroundColor = i % 2 === 0 ? "#3498db" : "#2980b9";
+    slice.textContent = hoca;
+    wheel.appendChild(slice);
+  });
+
+  spinBtn.addEventListener("click", () => {
+    spinBtn.disabled = true;
+    result.textContent = "";
+
+    const spins = Math.floor(Math.random() * 5) + 5; // 5-9 tam tur
+    const extraDegrees = Math.floor(Math.random() * 360);
+    const totalRotation = spins * 360 + extraDegrees;
+
+    currentRotation = (currentRotation + totalRotation) % 360;
+
+    wheel.style.transition = "transform 4s ease-out";
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+    setTimeout(() => {
+      spinBtn.disabled = false;
+      // Çark dönerken açı ters hesaplanıyor, bu yüzden:
+      const normalized = (360 - (currentRotation % 360)) % 360;
+      const index = Math.floor(normalized / segmentAngle);
+      const secilenHoca = hocalar[index];
+      result.textContent = `🎉 Çıkan Hoca: ${secilenHoca}`;
+    }, 4000);
+  });
+</script>
+
 </body>
 </html>
