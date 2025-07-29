@@ -1,144 +1,78 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<title>Düzgün Dönen Çark</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding-top: 60px;
-    background: #f5f5f5;
-  }
-  .container {
-    margin: auto;
-    width: 350px;
-  }
-  #wheel {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    border: 8px solid #2980b9;
-    position: relative;
-    margin: 0 auto 20px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
-    overflow: hidden;
-  }
-  .slice {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    top: 50%;
-    left: 50%;
-    transform-origin: 0% 0%;
-    border: 1px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 10px;
-    font-size: 12px;
-    font-weight: bold;
-    color: white;
-    box-sizing: border-box;
-  }
-  #spinBtn {
-    background: #2980b9;
-    border: none;
-    color: white;
-    padding: 14px 40px;
-    font-size: 18px;
-    border-radius: 12px;
-    cursor: pointer;
-  }
-  #spinBtn:disabled {
-    background: #7f8c8d;
-    cursor: not-allowed;
-  }
-  #result {
-    margin-top: 30px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #34495e;
-    min-height: 40px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hangi Hocasın?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #333;
+    }
+
+    button {
+      font-size: 1.5em;
+      padding: 15px 30px;
+      margin-top: 30px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 40px;
+      font-size: 1.8em;
+      color: #444;
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
-  <h1>🎡 Düzgün Dönen Çark</h1>
-  <div id="wheel"></div>
-  <button id="spinBtn">Çarkı Çevir</button>
+  <h1>Hangi Hocasın?</h1>
+  <button onclick="getRandomTeacher()">Butona Bas!</button>
   <div id="result"></div>
-</div>
 
-<script>
-  const hocalar = [
-    "MERAL BABACAN (CANIM HOCAM)",
-    "CEM (TARLA FARESİ)",
-    "TARİHÇİ (G*Y)",
-    "AHMET (KIRGINLIK)",
-    "MERVE ÜRER (ABDÜL BASİT ADAM)",
-    "DİLARA (ÖZLEDİK)",
-    "DİLEK (KÖR)",
-    "SEZİN (GERİ DÖN ŞEF!)",
-    "HÜMEYRA (SG)",
-    "ÖZLEM BÖLÜKBAŞ (GÖĞSÜNÜN DARALDIĞINI BİLİYORUZ)",
-    "HANİFE (PELTEK)",
-    "KOMUTAN",
-    "RESİMCİ (ADINI UNUTTUM)",
-    "SEZGİN (UKTE)",
-    "MEHMET ORTATEPE (👑)",
-    "MUAMMER",
-    "AVNİ",
-    "ZÜBEYDE",
-    "MURAT",
-    "İSMAİL KARTAL",
-    "EYÜP"
-  ];
+  <script>
+    const teachers = [
+      "MERAL BABACAN (CANIM HOCAM)",
+      "CEM (TARLA FARESİ)",
+      "TARİHÇİ (G*Y)",
+      "AHMET (KIRGINLIK)",
+      "MERVE ÜRER (ABDÜL BASİT ADAM)",
+      "DİLARA (ÖZLEDİK)",
+      "DİLEK (KÖR)",
+      "SEZİN (GERİ DÖN ŞEF !)",
+      "HÜMEYRA (SG)",
+      "ÖZLEM BÖLÜKBAŞ (GÖĞSÜNÜN DARALDIĞINI BİLİYORUZ)",
+      "HANİFE (PELTEK)",
+      "KOMUTAN",
+      "RESİMCİ (ADINI UNUTTUM)",
+      "SEZGİN (UKTE)",
+      "MEHMET ORTATEPE (👑)",
+      "MUAMMER",
+      "AVNİ",
+      "ZÜBEYDE",
+      "MURAT",
+      "İSMAİL KARTAL",
+      "EYÜP"
+    ];
 
-  const wheel = document.getElementById('wheel');
-  const spinBtn = document.getElementById('spinBtn');
-  const result = document.getElementById('result');
-  const segmentCount = hocalar.length;
-  const segmentAngle = 360 / segmentCount;
-  let currentRotation = 0;
-
-  // Dilimleri oluştur
-  hocalar.forEach((hoca, i) => {
-    const slice = document.createElement('div');
-    slice.classList.add('slice');
-    slice.style.backgroundColor = i % 2 === 0 ? '#3498db' : '#2980b9';
-    slice.style.transform = `rotate(${segmentAngle * i}deg) skewY(-${90 - segmentAngle}deg)`;
-    slice.textContent = hoca;
-    wheel.appendChild(slice);
-  });
-
-  spinBtn.addEventListener('click', () => {
-    spinBtn.disabled = true;
-    result.textContent = '';
-
-    const spins = Math.floor(Math.random() * 5) + 5; // 5-9 tur arası
-    const extraDegrees = Math.floor(Math.random() * 360);
-    const totalRotation = spins * 360 + extraDegrees;
-
-    currentRotation = (currentRotation + totalRotation) % 360;
-
-    wheel.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
-    wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-    setTimeout(() => {
-      spinBtn.disabled = false;
-
-      // Sonucu hesapla
-      const normalized = (360 - (currentRotation % 360)) % 360;
-      const index = Math.floor(normalized / segmentAngle);
-      const secilenHoca = hocalar[index];
-      result.textContent = `🎉 Çıkan Hoca: ${secilenHoca}`;
-    }, 4000);
-  });
-</script>
-
+    function getRandomTeacher() {
+      const randomIndex = Math.floor(Math.random() * teachers.length);
+      document.getElementById("result").innerText = teachers[randomIndex];
+    }
+  </script>
 </body>
 </html>
